@@ -1,0 +1,1044 @@
+<?xml version="1.0" encoding="UTF-8"?><unload unload_date="2018-10-27 02:12:57"><sys_remote_update_set action="INSERT_OR_UPDATE"><application display_value="Global">global</application><application_name>Global</application_name><application_scope>global</application_scope><application_version/><collisions/><commit_date/><deleted/><description/><inserted/><name>my-tickets-unified-2018-01-07</name><origin_sys_id/><parent/><release_date/><remote_base_update_set/><remote_parent_id/><remote_sys_id>95237f3cdbd5e3000a9572ffbf961946</remote_sys_id><state>loaded</state><summary/><sys_class_name>sys_remote_update_set</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:56</sys_created_on><sys_id>910b9013db156b000a9572ffbf9619e2</sys_id><sys_mod_count>0</sys_mod_count><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:56</sys_updated_on><update_set/><update_source/><updated/></sys_remote_update_set><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sp_widget_1486e8d1db2303008417da11cf961932</name><payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_widget"&gt;&lt;sp_widget action="INSERT_OR_UPDATE"&gt;&lt;client_script&gt;&lt;![CDATA[function ($location, $scope,spUtil) {
+	var c = this;
+
+	$scope.propertyName = 'sys_updated_on_value';
+	$scope.reverse = false;
+	$scope.sortBy = function(propertyName) {
+		$scope.reverse = ($scope.propertyName === propertyName) ? !$scope.reverse : false;
+		$scope.propertyName = propertyName;
+	};
+
+	// for opening in a new tab
+	$scope.getTicketHREF = function(id,table) {
+		return "?id=ticket&amp;table=" + table + "&amp;sys_id=" + id;
+	}
+
+	// highlight any tickets that have been created THIS minute
+	if(c.data.items.length){
+		var timestamp = moment(c.data.items[0].updated_display);
+		if(timestamp.diff(moment(),'minutes') == 0)
+			c.data.items[0].highlight = true;
+	}
+
+	// server side filter
+	$scope.ticketFilter = function(state) {
+		if(state == 'false')
+			c.data.monthsAgo = $scope.history.selectedOption.code
+			$scope.loading = true;
+		c.data.activeFlag = state;
+		spUtil.update($scope).then(function(result){
+			$scope.loading = false;
+		});
+	}
+
+	$scope.update = function() {
+		$scope.ticketFilter('false');
+	}
+
+	$scope.history = {
+		availableOptions: [
+			{code: '3', name: '3 months'}, 
+			{code: '6', name: '6 months'},
+			{code: '12', name: '12 months'},
+			{code: '24', name: '24 months'},
+			{code: '-1', name: 'All available'}
+		],
+		selectedOption: {code: 3, name: '3 months'} //This sets the default value of the select in the ui
+	};
+
+
+
+
+
+
+}
+
+]]&gt;&lt;/client_script&gt;&lt;controller_as&gt;c&lt;/controller_as&gt;&lt;css&gt;.panel-heading {&amp;#13;
+  position: relative;&amp;#13;
+  aside {&amp;#13;
+    position: absolute;&amp;#13;
+    right: 15px;&amp;#13;
+    top: 8px;&amp;#13;
+    input {&amp;#13;
+      width: 85px; &amp;#13;
+      padding: 0 20px 0 6px;&amp;#13;
+      background: transparent;&amp;#13;
+      border: none;&amp;#13;
+      border-bottom: 1px solid #ccc;&amp;#13;
+      -moz-transition: width 0.4s ease-in-out;&amp;#13;
+      -webkit-transition: width 0.4s ease-in-out;&amp;#13;
+      transition: width 0.4s ease-in-out;&amp;#13;
+      &amp;amp;:focus {&amp;#13;
+       width: 200px; &amp;#13;
+      }&amp;#13;
+    }&amp;#13;
+    i {&amp;#13;
+     position: absolute;&amp;#13;
+      right: 15px;&amp;#13;
+      top: 3px;&amp;#13;
+      pointer-events:none;&amp;#13;
+    }&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+.sorters {&amp;#13;
+  background: #eaf5fc;&amp;#13;
+  a {&amp;#13;
+    padding: 3px 15px;&amp;#13;
+    margin-top: 5px;&amp;#13;
+    &amp;amp;.tab-btn {&amp;#13;
+      margin-left: 5px;&amp;#13;
+      padding: 3px 5px;&amp;#13;
+      background: #fff;&amp;#13;
+      cursor: pointer;&amp;#13;
+    }&amp;#13;
+    &amp;amp;.active {&amp;#13;
+      border: 1px solid #eaeaea;&amp;#13;
+      border-bottom: none; &amp;#13;
+      font-weight: bold;&amp;#13;
+    }&amp;#13;
+  }&amp;#13;
+  select {&amp;#13;
+    width: auto; &amp;#13;
+    @include box-shadow(0);&amp;#13;
+    border: 0;&amp;#13;
+    background: transparent;&amp;#13;
+    margin-left: 5px;&amp;#13;
+    display: block;&amp;#13;
+    color: #ababab;&amp;#13;
+    margin-top: 11px;&amp;#13;
+    font-size: 0.7em;&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+.panel-body {&amp;#13;
+  padding: 0;&amp;#13;
+  p {&amp;#13;
+    padding: 15px; &amp;#13;
+  }&amp;#13;
+}&amp;#13;
+.ticket {&amp;#13;
+  padding: 0 15px;&amp;#13;
+  border-bottom: 1px solid #eaeaea;&amp;#13;
+  &amp;amp;.pulse {&amp;#13;
+    -webkit-animation-iteration-count: 3;&amp;#13;
+    -moz-animation-iteration-count: 3;&amp;#13;
+    animation-iteration-count: 3;&amp;#13;
+    background: #fcf8e3; &amp;#13;
+  }&amp;#13;
+  .item-header {&amp;#13;
+    margin-bottom: 3px;&amp;#13;
+    margin-top:3px;&amp;#13;
+    margin-left: -5px;&amp;#13;
+    font-size: .85em;&amp;#13;
+    .fa {&amp;#13;
+      .fa-circle {&amp;#13;
+        color: #9d6818; &amp;#13;
+      }&amp;#13;
+      &amp;amp;.fa-req .fa-circle {&amp;#13;
+        color: #107d8b;&amp;#13;
+      }&amp;#13;
+    }&amp;#13;
+    mark {&amp;#13;
+      float: right;&amp;#13;
+    }&amp;#13;
+  }&amp;#13;
+  label {&amp;#13;
+    font-size: .8em;&amp;#13;
+    text-transform: uppercase;&amp;#13;
+    font-weight: 100;&amp;#13;
+    border-width: 1px;&amp;#13;
+    border-style: solid;&amp;#13;
+    color: #333;&amp;#13;
+    float: right;&amp;#13;
+    margin-top: 2px;&amp;#13;
+    margin-right: 10px;&amp;#13;
+    border-color: #dacd94; &amp;#13;
+    color: #333;&amp;#13;
+    &amp;amp;.label-4 {border-color: red; color: #333; }&amp;#13;
+    &amp;amp;.label-5 {border-color: pink; color: #333;}&amp;#13;
+    &amp;amp;.child {border: none; float: none; margin: 0;}&amp;#13;
+  }&amp;#13;
+  span.child {&amp;#13;
+    font-weight: 100;&amp;#13;
+    color: #333;&amp;#13;
+  }&amp;#13;
+  header {&amp;#13;
+    padding: 0 0 10px;&amp;#13;
+    small {&amp;#13;
+      display: block;&amp;#13;
+      font-size: .75em;&amp;#13;
+    }&amp;#13;
+    &amp;gt; span {&amp;#13;
+      font-size: .75em;&amp;#13;
+      margin-left: 20px;&amp;#13;
+    }&amp;#13;
+    footer {&amp;#13;
+      font-size: .75em;&amp;#13;
+    }&amp;#13;
+  }&amp;#13;
+}&amp;#13;
+.pagination {&amp;#13;
+  margin: 0; &amp;#13;
+}&amp;#13;
+&amp;#13;
+&amp;#13;
+&lt;/css&gt;&lt;data_table&gt;sp_instance&lt;/data_table&gt;&lt;demo_data/&gt;&lt;description/&gt;&lt;docs/&gt;&lt;field_list&gt;title,sys_name,glyph,color&lt;/field_list&gt;&lt;has_preview&gt;false&lt;/has_preview&gt;&lt;id&gt;my-unified-tickets&lt;/id&gt;&lt;internal&gt;false&lt;/internal&gt;&lt;link/&gt;&lt;name&gt;My Unified Tickets&lt;/name&gt;&lt;option_schema&gt;[{"name":"maximum_entries","label":"Maximum Entries","type":"string"},{"name":"items_per_page","label":"Items per page","type":"string"}]&lt;/option_schema&gt;&lt;public&gt;false&lt;/public&gt;&lt;roles/&gt;&lt;script&gt;&lt;![CDATA[(function() {
+
+	options.maximum_entries = options.maximum_entries || '50';
+	options.items_per_page = options.items_per_page || '5';
+	options.title = options.title || 'My Tickets';
+	options.color = options.color || 'default';
+	data.items = [];
+
+	var u = gs.getUser().getID();
+
+	//INCIDENTS
+	var inc = new GlideRecord('incident');
+	if(input.activeFlag == 'false') {
+		if(input.monthsAgo == '-1')
+			inc.addQuery('active',false);
+		else
+			inc.addEncodedQuery('sys_updated_onONLast '+input.monthsAgo+' months@javascript:gs.monthsAgoStart('+input.monthsAgo+')@javascript:gs.endOfThisMonth()^active=false');
+	} else {
+		inc.addActiveQuery();
+	}
+	inc.addEncodedQuery('opened_by='+u+'^ORcaller_id='+u)
+	inc.orderByDesc('sys_updated_on');
+	inc.query();
+	while (inc.next()) {
+
+		var a = {};
+		$sp.getRecordValues(a, inc, 'sys_id,number,short_description,state,sys_updated_on,active');
+		var openedFor = inc.getValue('caller_id'),
+				openedBy = inc.getValue('opened_by');
+
+		if(openedFor != u)
+			a.opened_for =  inc.getDisplayValue('caller_id');
+		if(openedBy != u)
+			a.opened_by =  inc.getDisplayValue('opened_by');
+
+		a.updated_display = inc.sys_updated_on.getGlideObject().getNumericValue();
+		a.sys_created_on = inc.sys_created_on.getGlideObject().getNumericValue();
+		a.state_display = inc.state.getDisplayValue();
+		a.glyph = 'child';
+		a.color = 'yellow';
+		a.table = inc.getTableName();
+		a.sortOrder = inc.sys_updated_on.getGlideObject().getNumericValue();
+		data.items.push(a);
+	}
+
+	//REQUESTS
+	var req = new GlideRecord('sc_request');
+	if(input.activeFlag == 'false') {
+		if(input.monthsAgo == '-1')
+			req.addQuery('active',false);
+		else
+			req.addEncodedQuery('sys_updated_onONLast '+input.monthsAgo+' months@javascript:gs.monthsAgoStart('+input.monthsAgo+')@javascript:gs.endOfThisMonth()^active=false');
+	} else {
+		req.addActiveQuery();
+	}
+	req.addEncodedQuery('opened_by='+u+'^ORrequested_for='+u);
+	req.orderByDesc('sys_updated_on');
+	req.query();
+	while (req.next()) {
+		var ritm = new GlideRecord('sc_req_item');
+		ritm.addQuery('request', req.getUniqueValue());
+		
+		ritm.query();
+		if (ritm.getRowCount() == 0)
+			continue;
+
+		var b = {};
+		$sp.getRecordValues(b, req, 'sys_id,number,short_description,state,sys_updated_on,active');
+
+		var reqOpenedFor = req.getValue('requested_for'),
+				reqOpenedBy = req.getValue('opened_by');
+
+		if(reqOpenedFor != u)
+			b.opened_for =  req.getDisplayValue('requested_for');
+		if(reqOpenedBy != u)
+			b.opened_by =  req.getDisplayValue('opened_by');
+
+		b.updated_display = req.sys_updated_on.getGlideObject().getNumericValue();
+		b.sys_created_on = req.sys_created_on.getGlideObject().getNumericValue();
+		b.children = [];
+
+		while(ritm.next()) {
+			var child = {};
+			$sp.getRecordValues(child, ritm, 'sys_id,number,short_description,state,sys_updated_on,active');
+
+			if (ritm.getRowCount() &gt; 1) {
+				b.multi_item_request = 'Request ('+ritm.getRowCount()+' items)';
+			}
+			var ritmOpenedFor = ritm.getValue('u_requested_for'),
+					ritmOpenedBy = ritm.getValue('opened_by');
+
+			if(ritmOpenedFor != u)
+				child.opened_for =  ritm.getDisplayValue('u_requested_for');
+			if(ritmOpenedBy != u)
+				child.opened_by =  ritm.getDisplayValue('opened_by');
+
+			child.updated_display = ritm.sys_updated_on.getGlideObject().getNumericValue();
+			child.sys_created_on = ritm.sys_created_on.getGlideObject().getNumericValue();
+			child.stateDisplay = ritm.state.getDisplayValue();
+			b.children.push(child);
+		}
+
+		b.stateDisplay = req.state.getDisplayValue();
+		b.glyph = 'shopping-cart';
+		b.color = 'gold';
+		b.table = 'sc_req_item';
+		b.type = 'request';
+		b.sortOrder = req.sys_updated_on.getGlideObject().getNumericValue();
+		data.items.push(b);
+	}
+
+	data.items.sort(function(a, b) {
+		return b.sortOrder - a.sortOrder;
+	});
+	data.items = data.items.slice(0,options.maximum_entries); 
+	data.count = data.items.length;
+
+})()]]&gt;&lt;/script&gt;&lt;servicenow&gt;false&lt;/servicenow&gt;&lt;sys_class_name&gt;sp_widget&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2018-01-08 02:02:31&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;1486e8d1db2303008417da11cf961932&lt;/sys_id&gt;&lt;sys_mod_count&gt;11&lt;/sys_mod_count&gt;&lt;sys_name&gt;My Unified Tickets&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_widget_1486e8d1db2303008417da11cf961932&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2018-01-08 20:27:02&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;div class="panel panel-{{::options.color}} b"&gt;
+  &lt;!-- HEADER --&gt;
+  &lt;div class="panel-heading"&gt; 
+    &lt;h2 class="h4 panel-title"&gt;
+      &lt;i ng-if="::options.glyph" class="fa fa-{{::options.glyph}}"&gt; &lt;/i&gt; {{::options.title}}
+    &lt;/h2&gt; 
+    &lt;aside&gt;
+      &lt;input type="text" ng-model="search" placeholder="Filter.."&gt;
+      &lt;i class="fa fa-search"&gt;&lt;/i&gt;
+    &lt;/aside&gt;
+  &lt;/div&gt;
+  &lt;!-- FILTER AND SORT --&gt;
+  &lt;div class="sorters clearfix"&gt;
+    &lt;a class="pull-left tab-btn" ng-click="ticketFilter('true')" ng-class="{active: c.data.activeFlag == 'true' || !c.data.activeFlag }"&gt;${Active}&lt;/a&gt;
+    &lt;a class="pull-left tab-btn" ng-click="ticketFilter('false')" ng-class="{active: c.data.activeFlag == 'false' }"&gt;${Closed}&lt;/a&gt;
+
+    &lt;select class="pull-left" ng-show="c.data.activeFlag == 'false'" 
+            ng-options="option.name for option in history.availableOptions track by option.code"
+            ng-model="history.selectedOption" ng-change="update()"&gt;&lt;/select&gt;
+
+    &lt;a class="pull-right" ng-click="sortBy('sys_updated_on')" href="javascript:void(0)"&gt;${Updated} &lt;i class="fa" ng-show="propertyName === 'sys_updated_on'" ng-class="reverse ? 'fa-caret-down' : 'fa-caret-up'"&gt;&lt;/i&gt;&lt;/a&gt;
+    &lt;a class="pull-right hidden-xs" ng-click="sortBy('state')" href="javascript:void()"&gt;${Status} &lt;i class="fa" ng-show="propertyName === 'state'" ng-class="reverse ? 'fa-caret-up' : 'fa-caret-down'"&gt;&lt;/i&gt;&lt;/a&gt;
+  &lt;/div&gt;
+  &lt;!-- NO RESULTS --&gt;
+  &lt;section class="panel-body" ng-if="!c.data.items.length &amp;&amp; !loading "&gt;
+    &lt;p ng-if="c.data.activeFlag == 'true' || !c.data.activeFlag"&gt;${You do not have any active tickets}&lt;/p&gt;
+    &lt;p ng-if="c.data.activeFlag == 'false'"&gt;
+      &lt;span ng-if="history.selectedOption.code != '-1'"&gt;${You do not have any closed tickets within the last} {{history.selectedOption.name}}&lt;/span&gt;
+      &lt;span ng-if="history.selectedOption.code == '-1'"&gt;${You have no history of any closed items}&lt;/span&gt;
+    &lt;/p&gt;
+  &lt;/section&gt;
+  &lt;!-- ALL TICKETS --&gt;
+  &lt;section class="panel-body" ng-if="c.data.items.length"&gt;
+    &lt;div dir-paginate="item in c.data.items | filter: search | orderBy : propertyName : reverse | itemsPerPage: options.items_per_page" pagination-id="activity" ng-class="{'last':$last}"&gt;
+      &lt;!-- requests --&gt;
+      &lt;div ng-if="item.type == 'request'" class="ticket animated" ng-class="{pulse: item.highlight}"&gt;
+        &lt;aside class="item-header"&gt;
+          &lt;span class="fa fa-stack fa-req"&gt; &lt;i class="fa fa-circle fa-stack-2x"&gt;&lt;/i&gt; &lt;i class="fa fa-{{item.glyph}} fa-stack-1x fa-inverse"&gt;&lt;/i&gt; &lt;/span&gt;
+          &lt;span ng-if="!item.multi_item_request"&gt;{{item.children[0].number}}&lt;/span&gt;
+          {{item.multi_item_request}} 
+          &lt;mark&gt;
+            &lt;span&gt;Updated&lt;/span&gt; 
+            &lt;time ng-if="!item.multi_item_request" am-time-ago="item.children[0].updated_display"&gt;&lt;/time&gt;
+            &lt;time ng-if="item.multi_item_request" am-time-ago="item.updated_display"&gt;&lt;/time&gt;
+          &lt;/mark&gt;
+          &lt;label class="label label-{{item.state}}"&gt;
+            &lt;span ng-if="item.multi_item_request"&gt;{{item.stateDisplay}}&lt;/span&gt;
+            &lt;span ng-if="!item.multi_item_request"&gt;{{item.children[0].stateDisplay}}&lt;/span&gt;
+          &lt;/label&gt;
+        &lt;/aside&gt;
+        &lt;div ng-repeat="child in item.children"&gt;
+          &lt;header&gt;
+            &lt;small ng-if="child.opened_by"&gt;&lt;span&gt;Requested for you by &lt;/span&gt;{{child.opened_by}}&lt;/small&gt;
+            &lt;small ng-if="child.opened_for"&gt;&lt;span&gt;Requested for &lt;/span&gt;{{child.opened_for}}&lt;/small&gt;
+            &lt;a ng-href="{{getTicketHREF(child.sys_id, item.table)}}"&gt;{{child.short_description}}&lt;/a&gt; 
+            &lt;span&gt;
+              &lt;span class="child" ng-if="item.multi_item_request"&gt;{{child.number}}&lt;/span&gt;
+              &lt;label class="label label-{{child.state}} child" ng-if="item.multi_item_request"&gt;{{child.stateDisplay}}&lt;/label&gt;
+            &lt;/span&gt;
+            &lt;footer&gt;Created {{child.sys_created_on | amDateFormat:'MMM Do, YYYY'}}&lt;/footer&gt;
+          &lt;/header&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+
+      &lt;!-- Any other record types other than Requests (or RITM) --&gt;
+      &lt;div ng-if="item.type != 'request'" class="ticket animated" ng-class="{pulse: item.highlight}"&gt;
+        &lt;aside class="item-header"&gt;
+          &lt;span class="fa fa-stack"&gt; &lt;i class="fa fa-circle fa-stack-2x"&gt;&lt;/i&gt; &lt;i class="fa fa-{{item.glyph}} fa-stack-1x fa-inverse"&gt;&lt;/i&gt; &lt;/span&gt;
+          &lt;span&gt;{{item.number}}&lt;/span&gt;
+          &lt;mark&gt;&lt;span&gt;Updated&lt;/span&gt; &lt;time am-time-ago="item.updated_display"&gt;&lt;/time&gt;&lt;/mark&gt;
+          &lt;label class="label label-{{item.state}}"&gt;{{item.state_display}}&lt;/label&gt;
+        &lt;/aside&gt;
+        &lt;header&gt;
+          &lt;small ng-if="item.opened_by" class="text-muted"&gt;&lt;span&gt;Opened for you by &lt;/span&gt;{{item.opened_by}}&lt;/small&gt;
+          &lt;small ng-if="item.opened_for" class="text-muted"&gt;&lt;span&gt;Opened for &lt;/span&gt;{{item.opened_for}}&lt;/small&gt;
+          &lt;a ng-href="{{getTicketHREF(item.sys_id,item.table)}}"&gt;{{item.short_description}}&lt;/a&gt;
+          &lt;footer&gt;Created {{item.sys_created_on | amDateFormat:'MMM Do, YYYY'}}&lt;/footer&gt;
+        &lt;/header&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  &lt;footer class="panel-footer text-center"&gt;
+    &lt;dir-pagination-controls pagination-id="activity"&gt;&lt;/dir-pagination-controls&gt;
+  &lt;/footer&gt;
+&lt;/div&gt;
+
+]]&gt;&lt;/template&gt;&lt;/sp_widget&gt;&lt;/record_update&gt;</payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>110b9013db156b000a9572ffbf9619e4</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac390a0000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>My Unified Tickets</target_name><type>Widget</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sp_js_include_3639e011db2303008417da11cf961909</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_js_include"><sp_js_include action="INSERT_OR_UPDATE"><display_name>Angular Pagination</display_name><source>local</source><sys_class_name>sp_js_include</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:07:12</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>3639e011db2303008417da11cf961909</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Angular Pagination</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_ui_script display_value="dirPagination.js">0149e415db2303008417da11cf961952</sys_ui_script><sys_update_name>sp_js_include_3639e011db2303008417da11cf961909</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:07:12</sys_updated_on><url/></sp_js_include></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>150b9013db156b000a9572ffbf9619e3</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39040000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>Angular Pagination</target_name><type>JS Include</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>m2m_sp_dependency_js_include_8e79a851db2303008417da11cf961912</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include"><m2m_sp_dependency_js_include action="INSERT_OR_UPDATE"><order>300</order><sp_dependency display_value="Dependecies for My Tickets Widget">2f78e015db2303008417da11cf96197e</sp_dependency><sp_js_include display_value="Angular Pagination">3639e011db2303008417da11cf961909</sp_js_include><sys_class_name>m2m_sp_dependency_js_include</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:07:12</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>8e79a851db2303008417da11cf961912</sys_id><sys_mod_count>1</sys_mod_count><sys_name>Dependecies for My Tickets Widget.Angular Pagination</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_update_name>m2m_sp_dependency_js_include_8e79a851db2303008417da11cf961912</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:07:18</sys_updated_on></m2m_sp_dependency_js_include></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:56</sys_created_on><sys_id>190b9013db156b000a9572ffbf9619e2</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac38e50000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:56</sys_updated_on><table/><target_name>Dependecies for My Tickets Widget.Angular Pagination</target_name><type>Dependency JS Includes</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sp_dependency_2f78e015db2303008417da11cf96197e</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_dependency"><sp_dependency action="INSERT_OR_UPDATE"><module/><name>Dependecies for My Tickets Widget</name><page_load>false</page_load><sp_portals/><sys_class_name>sp_dependency</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:03:30</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>2f78e015db2303008417da11cf96197e</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Dependecies for My Tickets Widget</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_update_name>sp_dependency_2f78e015db2303008417da11cf96197e</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:03:30</sys_updated_on></sp_dependency></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:56</sys_created_on><sys_id>510b9013db156b000a9572ffbf9619e3</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac393d0000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:56</sys_updated_on><table/><target_name>Dependecies for My Tickets Widget</target_name><type>Widget Dependency</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>m2m_sp_dependency_js_include_7829e011db2303008417da11cf961908</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include"><m2m_sp_dependency_js_include action="INSERT_OR_UPDATE"><order>200</order><sp_dependency display_value="Dependecies for My Tickets Widget">2f78e015db2303008417da11cf96197e</sp_dependency><sp_js_include display_value="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.js">5ff8a415db2303008417da11cf96190d</sp_js_include><sys_class_name>m2m_sp_dependency_js_include</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:05:45</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>7829e011db2303008417da11cf961908</sys_id><sys_mod_count>1</sys_mod_count><sys_name>Dependecies for My Tickets Widget.https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.js</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_update_name>m2m_sp_dependency_js_include_7829e011db2303008417da11cf961908</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:05:53</sys_updated_on></m2m_sp_dependency_js_include></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:56</sys_created_on><sys_id>550b9013db156b000a9572ffbf9619e2</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39360000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:56</sys_updated_on><table/><target_name>Dependecies for My Tickets Widget.https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angul</target_name><type>Dependency JS Includes</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sp_ng_template_723c2895db2303008417da11cf9619dd</name><payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sp_ng_template"&gt;&lt;sp_ng_template action="INSERT_OR_UPDATE"&gt;&lt;id&gt;dirPagination&lt;/id&gt;&lt;sp_widget display_value="My Unified Tickets"&gt;1486e8d1db2303008417da11cf961932&lt;/sp_widget&gt;&lt;sys_class_name&gt;sp_ng_template&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2018-01-08 02:19:26&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;723c2895db2303008417da11cf9619dd&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;dirPagination&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sp_ng_template_723c2895db2303008417da11cf9619dd&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2018-01-08 02:19:26&lt;/sys_updated_on&gt;&lt;template&gt;&lt;![CDATA[&lt;ul class="pagination" ng-if="1 &lt; pages.length || !autoHide"&gt;
+    &lt;li ng-if="boundaryLinks" ng-class="{ disabled : pagination.current == 1 }"&gt;
+        &lt;a href="" ng-click="setCurrent(1)"&gt;&amp;laquo;&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }"&gt;
+        &lt;a href="" ng-click="setCurrent(pagination.current - 1)"&gt;&amp;lsaquo;&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li ng-repeat="pageNumber in pages track by tracker(pageNumber, $index)" ng-class="{ active : pagination.current == pageNumber, disabled : pageNumber == '...' }"&gt;
+        &lt;a href="" ng-click="setCurrent(pageNumber)"&gt;{{ pageNumber }}&lt;/a&gt;
+    &lt;/li&gt;
+
+    &lt;li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }"&gt;
+        &lt;a href="" ng-click="setCurrent(pagination.current + 1)"&gt;&amp;rsaquo;&lt;/a&gt;
+    &lt;/li&gt;
+    &lt;li ng-if="boundaryLinks"  ng-class="{ disabled : pagination.current == pagination.last }"&gt;
+        &lt;a href="" ng-click="setCurrent(pagination.last)"&gt;&amp;raquo;&lt;/a&gt;
+    &lt;/li&gt;
+&lt;/ul&gt;]]&gt;&lt;/template&gt;&lt;/sp_ng_template&gt;&lt;/record_update&gt;</payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>5d0b9013db156b000a9572ffbf9619e3</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39430000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>dirPagination</target_name><type>Angular ng-template</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sys_ui_script_b6b82415db2303008417da11cf961993</name><payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ui_script"&gt;&lt;sys_ui_script action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;description&gt;moment.js the angular way&lt;/description&gt;&lt;global&gt;false&lt;/global&gt;&lt;name&gt;angular.moment&lt;/name&gt;&lt;script&gt;&lt;![CDATA["format amd";!function(){"use strict";function a(a){return angular.isUndefined(a)||null===a}function b(){try{return require("moment")}catch(a){throw new Error("Please install moment via npm. Please reference to: https://github.com/urish/angular-moment")}}function c(c,d){if("undefined"==typeof d){if("function"!=typeof require)throw new Error("Moment cannot be found by angular-moment! Please reference to: https://github.com/urish/angular-moment");d=b()}return c.module("angularMoment",[]).constant("angularMomentConfig",{preprocess:null,timezone:null,format:null,statefulFilters:!0}).constant("moment",d).constant("amTimeAgoConfig",{withoutSuffix:!1,serverTime:null,titleFormat:null,fullDateThreshold:null,fullDateFormat:null,fullDateThresholdUnit:"day"}).directive("amTimeAgo",["$window","moment","amMoment","amTimeAgoConfig",function(b,d,e,f){return function(g,h,i){function j(){var a;if(p)a=p;else if(f.serverTime){var b=(new Date).getTime(),c=b-w+f.serverTime;a=d(c)}else a=d();return a}function k(){q&amp;&amp;(b.clearTimeout(q),q=null)}function l(a){var c=j().diff(a,v),d=t&amp;&amp;c&gt;=t;if(d?h.text(a.format(u)):h.text(a.from(j(),r)),s&amp;&amp;z&amp;&amp;h.attr("title",a.format(s)),!d){var e=Math.abs(j().diff(a,"minute")),f=3600;e&lt;1?f=1:e&lt;60?f=30:e&lt;180&amp;&amp;(f=300),q=b.setTimeout(function(){l(a)},1e3*f)}}function m(a){y&amp;&amp;h.attr("datetime",a)}function n(){if(k(),o){var a=e.preprocessDate(o);l(a),m(a.toISOString())}}var o,p,q=null,r=f.withoutSuffix,s=f.titleFormat,t=f.fullDateThreshold,u=f.fullDateFormat,v=f.fullDateThresholdUnit,w=(new Date).getTime(),x=i.amTimeAgo,y="TIME"===h[0].nodeName.toUpperCase(),z=!h.attr("title");g.$watch(x,function(b){return a(b)||""===b?(k(),void(o&amp;&amp;(h.text(""),m(""),o=null))):(o=b,void n())}),c.isDefined(i.amFrom)&amp;&amp;g.$watch(i.amFrom,function(b){p=a(b)||""===b?null:d(b),n()}),c.isDefined(i.amWithoutSuffix)&amp;&amp;g.$watch(i.amWithoutSuffix,function(a){"boolean"==typeof a?(r=a,n()):r=f.withoutSuffix}),i.$observe("amFullDateThreshold",function(a){t=a,n()}),i.$observe("amFullDateFormat",function(a){u=a,n()}),i.$observe("amFullDateThresholdUnit",function(a){v=a,n()}),g.$on("$destroy",function(){k()}),g.$on("amMoment:localeChanged",function(){n()})}}]).service("amMoment",["moment","$rootScope","$log","angularMomentConfig",function(a,b,d,e){var f=null;this.changeLocale=function(d,e){var f=a.locale(d,e);return c.isDefined(d)&amp;&amp;b.$broadcast("amMoment:localeChanged"),f},this.changeTimezone=function(c){a.tz&amp;&amp;a.tz.setDefault?(a.tz.setDefault(c),b.$broadcast("amMoment:timezoneChanged")):d.warn("angular-moment: changeTimezone() works only with moment-timezone.js v0.3.0 or greater."),e.timezone=c,f=c},this.preprocessDate=function(b){return f!==e.timezone&amp;&amp;this.changeTimezone(e.timezone),e.preprocess?e.preprocess(b):a(!isNaN(parseFloat(b))&amp;&amp;isFinite(b)?parseInt(b,10):b)}}]).filter("amParse",["moment",function(a){return function(b,c){return a(b,c)}}]).filter("amFromUnix",["moment",function(a){return function(b){return a.unix(b)}}]).filter("amUtc",["moment",function(a){return function(b){return a.utc(b)}}]).filter("amUtcOffset",["amMoment",function(a){function b(b,c){return a.preprocessDate(b).utcOffset(c)}return b}]).filter("amLocal",["moment",function(a){return function(b){return a.isMoment(b)?b.local():null}}]).filter("amTimezone",["amMoment","angularMomentConfig","$log",function(a,b,c){function d(b,d){var e=a.preprocessDate(b);return d?e.tz?e.tz(d):(c.warn("angular-moment: named timezone specified but moment.tz() is undefined. Did you forget to include moment-timezone.js ?"),e):e}return d}]).filter("amCalendar",["moment","amMoment","angularMomentConfig",function(b,c,d){function e(b,d,e){if(a(b))return"";var f=c.preprocessDate(b);return f.isValid()?f.calendar(d,e):""}return e.$stateful=d.statefulFilters,e}]).filter("amDifference",["moment","amMoment","angularMomentConfig",function(b,c,d){function e(d,e,f,g){if(a(d))return"";var h=c.preprocessDate(d),i=a(e)?b():c.preprocessDate(e);return h.isValid()&amp;&amp;i.isValid()?h.diff(i,f,g):""}return e.$stateful=d.statefulFilters,e}]).filter("amDateFormat",["moment","amMoment","angularMomentConfig",function(b,c,d){function e(b,d){if(a(b))return"";var e=c.preprocessDate(b);return e.isValid()?e.format(d):""}return e.$stateful=d.statefulFilters,e}]).filter("amDurationFormat",["moment","angularMomentConfig",function(b,c){function d(c,d,e){return a(c)?"":b.duration(c,d).humanize(e)}return d.$stateful=c.statefulFilters,d}]).filter("amTimeAgo",["moment","amMoment","angularMomentConfig",function(b,c,d){function e(d,e,f){var g,h;return a(d)?"":(d=c.preprocessDate(d),g=b(d),g.isValid()?(h=b(f),!a(f)&amp;&amp;h.isValid()?g.from(h,e):g.fromNow(e)):"")}return e.$stateful=d.statefulFilters,e}]).filter("amSubtract",["moment","angularMomentConfig",function(b,c){function d(c,d,e){return a(c)?"":b(c).subtract(parseInt(d,10),e)}return d.$stateful=c.statefulFilters,d}]).filter("amAdd",["moment","angularMomentConfig",function(b,c){function d(c,d,e){return a(c)?"":b(c).add(parseInt(d,10),e)}return d.$stateful=c.statefulFilters,d}]).filter("amStartOf",["moment","angularMomentConfig",function(b,c){function d(c,d){return a(c)?"":b(c).startOf(d)}return d.$stateful=c.statefulFilters,d}]).filter("amEndOf",["moment","angularMomentConfig",function(b,c){function d(c,d){return a(c)?"":b(c).endOf(d)}return d.$stateful=c.statefulFilters,d}]),"angularMoment"}var d=window&amp;&amp;window.process&amp;&amp;window.process.type;"function"==typeof define&amp;&amp;define.amd?define(["angular","moment"],c):"undefined"!=typeof module&amp;&amp;module&amp;&amp;module.exports&amp;&amp;"function"==typeof require&amp;&amp;!d?module.exports=c(require("angular"),require("moment")):c(angular,("undefined"!=typeof global?global:window).moment)}();
+//# sourceMappingURL=angular-moment.min.js.map]]&gt;&lt;/script&gt;&lt;script_name/&gt;&lt;sys_class_name&gt;sys_ui_script&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2018-01-08 02:04:47&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;b6b82415db2303008417da11cf961993&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;angular.moment&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ui_script_b6b82415db2303008417da11cf961993&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2018-01-08 02:04:47&lt;/sys_updated_on&gt;&lt;use_scoped_format&gt;false&lt;/use_scoped_format&gt;&lt;/sys_ui_script&gt;&lt;/record_update&gt;</payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>950b9013db156b000a9572ffbf9619e4</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39300000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>angular.moment</target_name><type>UI Script</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sp_js_include_5ff8a415db2303008417da11cf96190d</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_js_include"><sp_js_include action="INSERT_OR_UPDATE"><display_name>https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.js</display_name><source>url</source><sys_class_name>sp_js_include</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:05:45</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>5ff8a415db2303008417da11cf96190d</sys_id><sys_mod_count>0</sys_mod_count><sys_name>https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.js</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_ui_script/><sys_update_name>sp_js_include_5ff8a415db2303008417da11cf96190d</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:05:45</sys_updated_on><url>https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.js</url></sp_js_include></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>990b9013db156b000a9572ffbf9619e3</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac392a0000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.16/angular-filter.js</target_name><type>JS Include</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>m2m_sp_widget_dependency_8ca8e015db2303008417da11cf961980</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_widget_dependency"><m2m_sp_widget_dependency action="INSERT_OR_UPDATE"><sp_dependency display_value="Dependecies for My Tickets Widget">2f78e015db2303008417da11cf96197e</sp_dependency><sp_widget display_value="My Unified Tickets">1486e8d1db2303008417da11cf961932</sp_widget><sys_class_name>m2m_sp_widget_dependency</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:03:30</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>8ca8e015db2303008417da11cf961980</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Dependecies for My Tickets Widget.My Unified Tickets</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_update_name>m2m_sp_widget_dependency_8ca8e015db2303008417da11cf961980</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:03:30</sys_updated_on></m2m_sp_widget_dependency></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:56</sys_created_on><sys_id>9d0b9013db156b000a9572ffbf9619e2</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39250000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:56</sys_updated_on><table/><target_name>Dependecies for My Tickets Widget.My Unified Tickets</target_name><type>Widget Dependency</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sys_ui_script_0149e415db2303008417da11cf961952</name><payload>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;record_update table="sys_ui_script"&gt;&lt;sys_ui_script action="INSERT_OR_UPDATE"&gt;&lt;active&gt;true&lt;/active&gt;&lt;description&gt;https://github.com/michaelbromley/angularUtils/tree/master/src/directives/pagination . .&lt;/description&gt;&lt;global&gt;false&lt;/global&gt;&lt;name&gt;dirPagination.js&lt;/name&gt;&lt;script&gt;&lt;![CDATA[/**
+ * dirPagination - AngularJS module for paginating (almost) anything.
+ *
+ *
+ * Credits
+ * =======
+ *
+ * Daniel Tabuenca: https://groups.google.com/d/msg/angular/an9QpzqIYiM/r8v-3W1X5vcJ
+ * for the idea on how to dynamically invoke the ng-repeat directive.
+ *
+ * I borrowed a couple of lines and a few attribute names from the AngularUI Bootstrap project:
+ * https://github.com/angular-ui/bootstrap/blob/master/src/pagination/pagination.js
+ *
+ * Copyright 2014 Michael Bromley &lt;michael@michaelbromley.co.uk&gt;
+ */
+
+(function() {
+
+    /**
+     * Config
+     */
+    var moduleName = 'angularUtils.directives.dirPagination';
+    var DEFAULT_ID = '__default';
+
+    /**
+     * Module
+     */
+    angular.module(moduleName, [])
+        .directive('dirPaginate', ['$compile', '$parse', 'paginationService', dirPaginateDirective])
+        .directive('dirPaginateNoCompile', noCompileDirective)
+        .directive('dirPaginationControls', ['paginationService', 'paginationTemplate', dirPaginationControlsDirective])
+        .filter('itemsPerPage', ['paginationService', itemsPerPageFilter])
+        .service('paginationService', paginationService)
+        .provider('paginationTemplate', paginationTemplateProvider)
+        .run(['$templateCache',dirPaginationControlsTemplateInstaller]);
+
+    function dirPaginateDirective($compile, $parse, paginationService) {
+
+        return  {
+            terminal: true,
+            multiElement: true,
+            priority: 100,
+            compile: dirPaginationCompileFn
+        };
+
+        function dirPaginationCompileFn(tElement, tAttrs){
+
+            var expression = tAttrs.dirPaginate;
+            // regex taken directly from https://github.com/angular/angular.js/blob/v1.4.x/src/ng/directive/ngRepeat.js#L339
+            var match = expression.match(/^\s*([\s\S]+?)\s+in\s+([\s\S]+?)(?:\s+as\s+([\s\S]+?))?(?:\s+track\s+by\s+([\s\S]+?))?\s*$/);
+
+            var filterPattern = /\|\s*itemsPerPage\s*:\s*(.*\(\s*\w*\)|([^\)]*?(?=\s+as\s+))|[^\)]*)/;
+            if (match[2].match(filterPattern) === null) {
+                throw 'pagination directive: the \'itemsPerPage\' filter must be set.';
+            }
+            var itemsPerPageFilterRemoved = match[2].replace(filterPattern, '');
+            var collectionGetter = $parse(itemsPerPageFilterRemoved);
+
+            addNoCompileAttributes(tElement);
+
+            // If any value is specified for paginationId, we register the un-evaluated expression at this stage for the benefit of any
+            // dir-pagination-controls directives that may be looking for this ID.
+            var rawId = tAttrs.paginationId || DEFAULT_ID;
+            paginationService.registerInstance(rawId);
+
+            return function dirPaginationLinkFn(scope, element, attrs){
+
+                // Now that we have access to the `scope` we can interpolate any expression given in the paginationId attribute and
+                // potentially register a new ID if it evaluates to a different value than the rawId.
+                var paginationId = $parse(attrs.paginationId)(scope) || attrs.paginationId || DEFAULT_ID;
+                
+                // (TODO: this seems sound, but I'm reverting as many bug reports followed it's introduction in 0.11.0.
+                // Needs more investigation.)
+                // In case rawId != paginationId we deregister using rawId for the sake of general cleanliness
+                // before registering using paginationId
+                // paginationService.deregisterInstance(rawId);
+                paginationService.registerInstance(paginationId);
+
+                var repeatExpression = getRepeatExpression(expression, paginationId);
+                addNgRepeatToElement(element, attrs, repeatExpression);
+
+                removeTemporaryAttributes(element);
+                var compiled =  $compile(element);
+
+                var currentPageGetter = makeCurrentPageGetterFn(scope, attrs, paginationId);
+                paginationService.setCurrentPageParser(paginationId, currentPageGetter, scope);
+
+                if (typeof attrs.totalItems !== 'undefined') {
+                    paginationService.setAsyncModeTrue(paginationId);
+                    scope.$watch(function() {
+                        return $parse(attrs.totalItems)(scope);
+                    }, function (result) {
+                        if (0 &lt;= result) {
+                            paginationService.setCollectionLength(paginationId, result);
+                        }
+                    });
+                } else {
+                    paginationService.setAsyncModeFalse(paginationId);
+                    scope.$watchCollection(function() {
+                        return collectionGetter(scope);
+                    }, function(collection) {
+                        if (collection) {
+                            var collectionLength = (collection instanceof Array) ? collection.length : Object.keys(collection).length;
+                            paginationService.setCollectionLength(paginationId, collectionLength);
+                        }
+                    });
+                }
+
+                // Delegate to the link function returned by the new compilation of the ng-repeat
+                compiled(scope);
+                 
+                // (TODO: Reverting this due to many bug reports in v 0.11.0. Needs investigation as the
+                // principle is sound)
+                // When the scope is destroyed, we make sure to remove the reference to it in paginationService
+                // so that it can be properly garbage collected
+                // scope.$on('$destroy', function destroyDirPagination() {
+                //     paginationService.deregisterInstance(paginationId);
+                // });
+            };
+        }
+
+        /**
+         * If a pagination id has been specified, we need to check that it is present as the second argument passed to
+         * the itemsPerPage filter. If it is not there, we add it and return the modified expression.
+         *
+         * @param expression
+         * @param paginationId
+         * @returns {*}
+         */
+        function getRepeatExpression(expression, paginationId) {
+            var repeatExpression,
+                idDefinedInFilter = !!expression.match(/(\|\s*itemsPerPage\s*:[^|]*:[^|]*)/);
+
+            if (paginationId !== DEFAULT_ID &amp;&amp; !idDefinedInFilter) {
+                repeatExpression = expression.replace(/(\|\s*itemsPerPage\s*:\s*[^|\s]*)/, "$1 : '" + paginationId + "'");
+            } else {
+                repeatExpression = expression;
+            }
+
+            return repeatExpression;
+        }
+
+        /**
+         * Adds the ng-repeat directive to the element. In the case of multi-element (-start, -end) it adds the
+         * appropriate multi-element ng-repeat to the first and last element in the range.
+         * @param element
+         * @param attrs
+         * @param repeatExpression
+         */
+        function addNgRepeatToElement(element, attrs, repeatExpression) {
+            if (element[0].hasAttribute('dir-paginate-start') || element[0].hasAttribute('data-dir-paginate-start')) {
+                // using multiElement mode (dir-paginate-start, dir-paginate-end)
+                attrs.$set('ngRepeatStart', repeatExpression);
+                element.eq(element.length - 1).attr('ng-repeat-end', true);
+            } else {
+                attrs.$set('ngRepeat', repeatExpression);
+            }
+        }
+
+        /**
+         * Adds the dir-paginate-no-compile directive to each element in the tElement range.
+         * @param tElement
+         */
+        function addNoCompileAttributes(tElement) {
+            angular.forEach(tElement, function(el) {
+                if (el.nodeType === 1) {
+                    angular.element(el).attr('dir-paginate-no-compile', true);
+                }
+            });
+        }
+
+        /**
+         * Removes the variations on dir-paginate (data-, -start, -end) and the dir-paginate-no-compile directives.
+         * @param element
+         */
+        function removeTemporaryAttributes(element) {
+            angular.forEach(element, function(el) {
+                if (el.nodeType === 1) {
+                    angular.element(el).removeAttr('dir-paginate-no-compile');
+                }
+            });
+            element.eq(0).removeAttr('dir-paginate-start').removeAttr('dir-paginate').removeAttr('data-dir-paginate-start').removeAttr('data-dir-paginate');
+            element.eq(element.length - 1).removeAttr('dir-paginate-end').removeAttr('data-dir-paginate-end');
+        }
+
+        /**
+         * Creates a getter function for the current-page attribute, using the expression provided or a default value if
+         * no current-page expression was specified.
+         *
+         * @param scope
+         * @param attrs
+         * @param paginationId
+         * @returns {*}
+         */
+        function makeCurrentPageGetterFn(scope, attrs, paginationId) {
+            var currentPageGetter;
+            if (attrs.currentPage) {
+                currentPageGetter = $parse(attrs.currentPage);
+            } else {
+                // If the current-page attribute was not set, we'll make our own.
+                // Replace any non-alphanumeric characters which might confuse
+                // the $parse service and give unexpected results.
+                // See https://github.com/michaelbromley/angularUtils/issues/233
+                var defaultCurrentPage = (paginationId + '__currentPage').replace(/\W/g, '_');
+                scope[defaultCurrentPage] = 1;
+                currentPageGetter = $parse(defaultCurrentPage);
+            }
+            return currentPageGetter;
+        }
+    }
+
+    /**
+     * This is a helper directive that allows correct compilation when in multi-element mode (ie dir-paginate-start, dir-paginate-end).
+     * It is dynamically added to all elements in the dir-paginate compile function, and it prevents further compilation of
+     * any inner directives. It is then removed in the link function, and all inner directives are then manually compiled.
+     */
+    function noCompileDirective() {
+        return {
+            priority: 5000,
+            terminal: true
+        };
+    }
+
+    function dirPaginationControlsTemplateInstaller($templateCache) {
+        $templateCache.put('angularUtils.directives.dirPagination.template', '&lt;ul class="pagination" ng-if="1 &lt; pages.length || !autoHide"&gt;&lt;li ng-if="boundaryLinks" ng-class="{ disabled : pagination.current == 1 }"&gt;&lt;a href="" ng-click="setCurrent(1)"&gt;&amp;laquo;&lt;/a&gt;&lt;/li&gt;&lt;li ng-if="directionLinks" ng-class="{ disabled : pagination.current == 1 }"&gt;&lt;a href="" ng-click="setCurrent(pagination.current - 1)"&gt;&amp;lsaquo;&lt;/a&gt;&lt;/li&gt;&lt;li ng-repeat="pageNumber in pages track by tracker(pageNumber, $index)" ng-class="{ active : pagination.current == pageNumber, disabled : pageNumber == \'...\' || ( ! autoHide &amp;&amp; pages.length === 1 ) }"&gt;&lt;a href="" ng-click="setCurrent(pageNumber)"&gt;{{ pageNumber }}&lt;/a&gt;&lt;/li&gt;&lt;li ng-if="directionLinks" ng-class="{ disabled : pagination.current == pagination.last }"&gt;&lt;a href="" ng-click="setCurrent(pagination.current + 1)"&gt;&amp;rsaquo;&lt;/a&gt;&lt;/li&gt;&lt;li ng-if="boundaryLinks"  ng-class="{ disabled : pagination.current == pagination.last }"&gt;&lt;a href="" ng-click="setCurrent(pagination.last)"&gt;&amp;raquo;&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;');
+    }
+
+    function dirPaginationControlsDirective(paginationService, paginationTemplate) {
+
+        var numberRegex = /^\d+$/;
+
+        var DDO = {
+            restrict: 'AE',
+            scope: {
+                maxSize: '=?',
+                onPageChange: '&amp;?',
+                paginationId: '=?',
+                autoHide: '=?'
+            },
+            link: dirPaginationControlsLinkFn
+        };
+
+        // We need to check the paginationTemplate service to see whether a template path or
+        // string has been specified, and add the `template` or `templateUrl` property to
+        // the DDO as appropriate. The order of priority to decide which template to use is
+        // (highest priority first):
+        // 1. paginationTemplate.getString()
+        // 2. attrs.templateUrl
+        // 3. paginationTemplate.getPath()
+        var templateString = paginationTemplate.getString();
+        if (templateString !== undefined) {
+            DDO.template = templateString;
+        } else {
+            DDO.templateUrl = function(elem, attrs) {
+                return attrs.templateUrl || paginationTemplate.getPath();
+            };
+        }
+        return DDO;
+
+        function dirPaginationControlsLinkFn(scope, element, attrs) {
+
+            // rawId is the un-interpolated value of the pagination-id attribute. This is only important when the corresponding dir-paginate directive has
+            // not yet been linked (e.g. if it is inside an ng-if block), and in that case it prevents this controls directive from assuming that there is
+            // no corresponding dir-paginate directive and wrongly throwing an exception.
+            var rawId = attrs.paginationId ||  DEFAULT_ID;
+            var paginationId = scope.paginationId || attrs.paginationId ||  DEFAULT_ID;
+
+            if (!paginationService.isRegistered(paginationId) &amp;&amp; !paginationService.isRegistered(rawId)) {
+                var idMessage = (paginationId !== DEFAULT_ID) ? ' (id: ' + paginationId + ') ' : ' ';
+                if (window.console) {
+                    console.warn('Pagination directive: the pagination controls' + idMessage + 'cannot be used without the corresponding pagination directive, which was not found at link time.');
+                }
+            }
+
+            if (!scope.maxSize) { scope.maxSize = 9; }
+            scope.autoHide = scope.autoHide === undefined ? true : scope.autoHide;
+            scope.directionLinks = angular.isDefined(attrs.directionLinks) ? scope.$parent.$eval(attrs.directionLinks) : true;
+            scope.boundaryLinks = angular.isDefined(attrs.boundaryLinks) ? scope.$parent.$eval(attrs.boundaryLinks) : false;
+
+            var paginationRange = Math.max(scope.maxSize, 5);
+            scope.pages = [];
+            scope.pagination = {
+                last: 1,
+                current: 1
+            };
+            scope.range = {
+                lower: 1,
+                upper: 1,
+                total: 1
+            };
+
+            scope.$watch('maxSize', function(val) {
+                if (val) {
+                    paginationRange = Math.max(scope.maxSize, 5);
+                    generatePagination();
+                }
+            });
+
+            scope.$watch(function() {
+                if (paginationService.isRegistered(paginationId)) {
+                    return (paginationService.getCollectionLength(paginationId) + 1) * paginationService.getItemsPerPage(paginationId);
+                }
+            }, function(length) {
+                if (0 &lt; length) {
+                    generatePagination();
+                }
+            });
+
+            scope.$watch(function() {
+                if (paginationService.isRegistered(paginationId)) {
+                    return (paginationService.getItemsPerPage(paginationId));
+                }
+            }, function(current, previous) {
+                if (current != previous &amp;&amp; typeof previous !== 'undefined') {
+                    goToPage(scope.pagination.current);
+                }
+            });
+
+            scope.$watch(function() {
+                if (paginationService.isRegistered(paginationId)) {
+                    return paginationService.getCurrentPage(paginationId);
+                }
+            }, function(currentPage, previousPage) {
+                if (currentPage != previousPage) {
+                    goToPage(currentPage);
+                }
+            });
+
+            scope.setCurrent = function(num) {
+                if (paginationService.isRegistered(paginationId) &amp;&amp; isValidPageNumber(num)) {
+                    num = parseInt(num, 10);
+                    paginationService.setCurrentPage(paginationId, num);
+                }
+            };
+
+            /**
+             * Custom "track by" function which allows for duplicate "..." entries on long lists,
+             * yet fixes the problem of wrongly-highlighted links which happens when using
+             * "track by $index" - see https://github.com/michaelbromley/angularUtils/issues/153
+             * @param id
+             * @param index
+             * @returns {string}
+             */
+            scope.tracker = function(id, index) {
+                return id + '_' + index;
+            };
+
+            function goToPage(num) {
+                if (paginationService.isRegistered(paginationId) &amp;&amp; isValidPageNumber(num)) {
+                    var oldPageNumber = scope.pagination.current;
+
+                    scope.pages = generatePagesArray(num, paginationService.getCollectionLength(paginationId), paginationService.getItemsPerPage(paginationId), paginationRange);
+                    scope.pagination.current = num;
+                    updateRangeValues();
+
+                    // if a callback has been set, then call it with the page number as the first argument
+                    // and the previous page number as a second argument
+                    if (scope.onPageChange) {
+                        scope.onPageChange({
+                            newPageNumber : num,
+                            oldPageNumber : oldPageNumber
+                        });
+                    }
+                }
+            }
+
+            function generatePagination() {
+                if (paginationService.isRegistered(paginationId)) {
+                    var page = parseInt(paginationService.getCurrentPage(paginationId)) || 1;
+                    scope.pages = generatePagesArray(page, paginationService.getCollectionLength(paginationId), paginationService.getItemsPerPage(paginationId), paginationRange);
+                    scope.pagination.current = page;
+                    scope.pagination.last = scope.pages[scope.pages.length - 1];
+                    if (scope.pagination.last &lt; scope.pagination.current) {
+                        scope.setCurrent(scope.pagination.last);
+                    } else {
+                        updateRangeValues();
+                    }
+                }
+            }
+
+            /**
+             * This function updates the values (lower, upper, total) of the `scope.range` object, which can be used in the pagination
+             * template to display the current page range, e.g. "showing 21 - 40 of 144 results";
+             */
+            function updateRangeValues() {
+                if (paginationService.isRegistered(paginationId)) {
+                    var currentPage = paginationService.getCurrentPage(paginationId),
+                        itemsPerPage = paginationService.getItemsPerPage(paginationId),
+                        totalItems = paginationService.getCollectionLength(paginationId);
+
+                    scope.range.lower = (currentPage - 1) * itemsPerPage + 1;
+                    scope.range.upper = Math.min(currentPage * itemsPerPage, totalItems);
+                    scope.range.total = totalItems;
+                }
+            }
+            function isValidPageNumber(num) {
+                return (numberRegex.test(num) &amp;&amp; (0 &lt; num &amp;&amp; num &lt;= scope.pagination.last));
+            }
+        }
+
+        /**
+         * Generate an array of page numbers (or the '...' string) which is used in an ng-repeat to generate the
+         * links used in pagination
+         *
+         * @param currentPage
+         * @param rowsPerPage
+         * @param paginationRange
+         * @param collectionLength
+         * @returns {Array}
+         */
+        function generatePagesArray(currentPage, collectionLength, rowsPerPage, paginationRange) {
+            var pages = [];
+            var totalPages = Math.ceil(collectionLength / rowsPerPage);
+            var halfWay = Math.ceil(paginationRange / 2);
+            var position;
+
+            if (currentPage &lt;= halfWay) {
+                position = 'start';
+            } else if (totalPages - halfWay &lt; currentPage) {
+                position = 'end';
+            } else {
+                position = 'middle';
+            }
+
+            var ellipsesNeeded = paginationRange &lt; totalPages;
+            var i = 1;
+            while (i &lt;= totalPages &amp;&amp; i &lt;= paginationRange) {
+                var pageNumber = calculatePageNumber(i, currentPage, paginationRange, totalPages);
+
+                var openingEllipsesNeeded = (i === 2 &amp;&amp; (position === 'middle' || position === 'end'));
+                var closingEllipsesNeeded = (i === paginationRange - 1 &amp;&amp; (position === 'middle' || position === 'start'));
+                if (ellipsesNeeded &amp;&amp; (openingEllipsesNeeded || closingEllipsesNeeded)) {
+                    pages.push('...');
+                } else {
+                    pages.push(pageNumber);
+                }
+                i ++;
+            }
+            return pages;
+        }
+
+        /**
+         * Given the position in the sequence of pagination links [i], figure out what page number corresponds to that position.
+         *
+         * @param i
+         * @param currentPage
+         * @param paginationRange
+         * @param totalPages
+         * @returns {*}
+         */
+        function calculatePageNumber(i, currentPage, paginationRange, totalPages) {
+            var halfWay = Math.ceil(paginationRange/2);
+            if (i === paginationRange) {
+                return totalPages;
+            } else if (i === 1) {
+                return i;
+            } else if (paginationRange &lt; totalPages) {
+                if (totalPages - halfWay &lt; currentPage) {
+                    return totalPages - paginationRange + i;
+                } else if (halfWay &lt; currentPage) {
+                    return currentPage - halfWay + i;
+                } else {
+                    return i;
+                }
+            } else {
+                return i;
+            }
+        }
+    }
+
+    /**
+     * This filter slices the collection into pages based on the current page number and number of items per page.
+     * @param paginationService
+     * @returns {Function}
+     */
+    function itemsPerPageFilter(paginationService) {
+
+        return function(collection, itemsPerPage, paginationId) {
+            if (typeof (paginationId) === 'undefined') {
+                paginationId = DEFAULT_ID;
+            }
+            if (!paginationService.isRegistered(paginationId)) {
+                throw 'pagination directive: the itemsPerPage id argument (id: ' + paginationId + ') does not match a registered pagination-id.';
+            }
+            var end;
+            var start;
+            if (angular.isObject(collection)) {
+                itemsPerPage = parseInt(itemsPerPage) || 9999999999;
+                if (paginationService.isAsyncMode(paginationId)) {
+                    start = 0;
+                } else {
+                    start = (paginationService.getCurrentPage(paginationId) - 1) * itemsPerPage;
+                }
+                end = start + itemsPerPage;
+                paginationService.setItemsPerPage(paginationId, itemsPerPage);
+
+                if (collection instanceof Array) {
+                    // the array just needs to be sliced
+                    return collection.slice(start, end);
+                } else {
+                    // in the case of an object, we need to get an array of keys, slice that, then map back to
+                    // the original object.
+                    var slicedObject = {};
+                    angular.forEach(keys(collection).slice(start, end), function(key) {
+                        slicedObject[key] = collection[key];
+                    });
+                    return slicedObject;
+                }
+            } else {
+                return collection;
+            }
+        };
+    }
+
+    /**
+     * Shim for the Object.keys() method which does not exist in IE &lt; 9
+     * @param obj
+     * @returns {Array}
+     */
+    function keys(obj) {
+        if (!Object.keys) {
+            var objKeys = [];
+            for (var i in obj) {
+                if (obj.hasOwnProperty(i)) {
+                    objKeys.push(i);
+                }
+            }
+            return objKeys;
+        } else {
+            return Object.keys(obj);
+        }
+    }
+
+    /**
+     * This service allows the various parts of the module to communicate and stay in sync.
+     */
+    function paginationService() {
+
+        var instances = {};
+        var lastRegisteredInstance;
+
+        this.registerInstance = function(instanceId) {
+            if (typeof instances[instanceId] === 'undefined') {
+                instances[instanceId] = {
+                    asyncMode: false
+                };
+                lastRegisteredInstance = instanceId;
+            }
+        };
+
+        this.deregisterInstance = function(instanceId) {
+            delete instances[instanceId];
+        };
+        
+        this.isRegistered = function(instanceId) {
+            return (typeof instances[instanceId] !== 'undefined');
+        };
+
+        this.getLastInstanceId = function() {
+            return lastRegisteredInstance;
+        };
+
+        this.setCurrentPageParser = function(instanceId, val, scope) {
+            instances[instanceId].currentPageParser = val;
+            instances[instanceId].context = scope;
+        };
+        this.setCurrentPage = function(instanceId, val) {
+            instances[instanceId].currentPageParser.assign(instances[instanceId].context, val);
+        };
+        this.getCurrentPage = function(instanceId) {
+            var parser = instances[instanceId].currentPageParser;
+            return parser ? parser(instances[instanceId].context) : 1;
+        };
+
+        this.setItemsPerPage = function(instanceId, val) {
+            instances[instanceId].itemsPerPage = val;
+        };
+        this.getItemsPerPage = function(instanceId) {
+            return instances[instanceId].itemsPerPage;
+        };
+
+        this.setCollectionLength = function(instanceId, val) {
+            instances[instanceId].collectionLength = val;
+        };
+        this.getCollectionLength = function(instanceId) {
+            return instances[instanceId].collectionLength;
+        };
+
+        this.setAsyncModeTrue = function(instanceId) {
+            instances[instanceId].asyncMode = true;
+        };
+
+        this.setAsyncModeFalse = function(instanceId) {
+            instances[instanceId].asyncMode = false;
+        };
+
+        this.isAsyncMode = function(instanceId) {
+            return instances[instanceId].asyncMode;
+        };
+    }
+
+    /**
+     * This provider allows global configuration of the template path used by the dir-pagination-controls directive.
+     */
+    function paginationTemplateProvider() {
+
+        var templatePath = 'angularUtils.directives.dirPagination.template';
+        var templateString;
+
+        /**
+         * Set a templateUrl to be used by all instances of &lt;dir-pagination-controls&gt;
+         * @param {String} path
+         */
+        this.setPath = function(path) {
+            templatePath = path;
+        };
+
+        /**
+         * Set a string of HTML to be used as a template by all instances
+         * of &lt;dir-pagination-controls&gt;. If both a path *and* a string have been set,
+         * the string takes precedence.
+         * @param {String} str
+         */
+        this.setString = function(str) {
+            templateString = str;
+        };
+
+        this.$get = function() {
+            return {
+                getPath: function() {
+                    return templatePath;
+                },
+                getString: function() {
+                    return templateString;
+                }
+            };
+        };
+    }
+})();]]&gt;&lt;/script&gt;&lt;script_name/&gt;&lt;sys_class_name&gt;sys_ui_script&lt;/sys_class_name&gt;&lt;sys_created_by&gt;admin&lt;/sys_created_by&gt;&lt;sys_created_on&gt;2018-01-08 02:07:07&lt;/sys_created_on&gt;&lt;sys_customer_update&gt;true&lt;/sys_customer_update&gt;&lt;sys_id&gt;0149e415db2303008417da11cf961952&lt;/sys_id&gt;&lt;sys_mod_count&gt;0&lt;/sys_mod_count&gt;&lt;sys_name&gt;dirPagination.js&lt;/sys_name&gt;&lt;sys_package display_value="Global" source="global"&gt;global&lt;/sys_package&gt;&lt;sys_policy/&gt;&lt;sys_replace_on_upgrade&gt;false&lt;/sys_replace_on_upgrade&gt;&lt;sys_scope display_value="Global"&gt;global&lt;/sys_scope&gt;&lt;sys_update_name&gt;sys_ui_script_0149e415db2303008417da11cf961952&lt;/sys_update_name&gt;&lt;sys_updated_by&gt;admin&lt;/sys_updated_by&gt;&lt;sys_updated_on&gt;2018-01-08 02:07:07&lt;/sys_updated_on&gt;&lt;use_scoped_format&gt;false&lt;/use_scoped_format&gt;&lt;/sys_ui_script&gt;&lt;/record_update&gt;</payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>d10b9013db156b000a9572ffbf9619e4</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac391c0000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>dirPagination.js</target_name><type>UI Script</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>sp_js_include_52a82415db2303008417da11cf961938</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="sp_js_include"><sp_js_include action="INSERT_OR_UPDATE"><display_name>Angular Moment JS</display_name><source>local</source><sys_class_name>sp_js_include</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:05:00</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>52a82415db2303008417da11cf961938</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Angular Moment JS</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_ui_script display_value="angular.moment">b6b82415db2303008417da11cf961993</sys_ui_script><sys_update_name>sp_js_include_52a82415db2303008417da11cf961938</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:05:00</sys_updated_on><url/></sp_js_include></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:57</sys_created_on><sys_id>d50b9013db156b000a9572ffbf9619e3</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39170000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:57</sys_updated_on><table/><target_name>Angular Moment JS</target_name><type>JS Include</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml><sys_update_xml action="INSERT_OR_UPDATE"><action>INSERT_OR_UPDATE</action><application display_value="Global">global</application><category>customer</category><comments/><name>m2m_sp_dependency_js_include_c6f86415db2303008417da11cf9619b8</name><payload><![CDATA[<?xml version="1.0" encoding="UTF-8"?><record_update table="m2m_sp_dependency_js_include"><m2m_sp_dependency_js_include action="INSERT_OR_UPDATE"><order>100</order><sp_dependency display_value="Dependecies for My Tickets Widget">2f78e015db2303008417da11cf96197e</sp_dependency><sp_js_include display_value="Angular Moment JS">52a82415db2303008417da11cf961938</sp_js_include><sys_class_name>m2m_sp_dependency_js_include</sys_class_name><sys_created_by>admin</sys_created_by><sys_created_on>2018-01-08 02:05:00</sys_created_on><sys_customer_update>true</sys_customer_update><sys_id>c6f86415db2303008417da11cf9619b8</sys_id><sys_mod_count>0</sys_mod_count><sys_name>Dependecies for My Tickets Widget.Angular Moment JS</sys_name><sys_package display_value="Global" source="global">global</sys_package><sys_policy/><sys_replace_on_upgrade>false</sys_replace_on_upgrade><sys_scope display_value="Global">global</sys_scope><sys_update_name>m2m_sp_dependency_js_include_c6f86415db2303008417da11cf9619b8</sys_update_name><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-01-08 02:05:00</sys_updated_on></m2m_sp_dependency_js_include></record_update>]]></payload><payload_hash/><remote_update_set display_value="my-tickets-unified-2018-01-07">910b9013db156b000a9572ffbf9619e2</remote_update_set><replace_on_upgrade>false</replace_on_upgrade><sys_created_by>admin</sys_created_by><sys_created_on>2018-10-27 02:12:56</sys_created_on><sys_id>d90b9013db156b000a9572ffbf9619e2</sys_id><sys_mod_count>0</sys_mod_count><sys_recorded_at>1668eac39110000001</sys_recorded_at><sys_updated_by>admin</sys_updated_by><sys_updated_on>2018-10-27 02:12:56</sys_updated_on><table/><target_name>Dependecies for My Tickets Widget.Angular Moment JS</target_name><type>Dependency JS Includes</type><update_domain>global</update_domain><update_guid/><update_guid_history/><update_set/><view/></sys_update_xml></unload>
